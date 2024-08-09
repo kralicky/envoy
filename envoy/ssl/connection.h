@@ -128,6 +128,18 @@ public:
   virtual absl::optional<SystemTime> expirationPeerCertificate() const PURE;
 
   /**
+   * @return absl::Span<const std::string> the email entries in the SAN field of the peer certificate.
+   *         Returns {} if there is no peer certificate, or no SAN field, or no emails.
+   **/
+  virtual absl::Span<const std::string> emailSansPeerCertificate() const PURE;
+
+  /**
+   * @return absl::Span<const std::string> the othername entries in the SAN field of the peer certificate.
+   *         Returns {} if there is no peer certificate, or no SAN field, or no othername entries.
+   **/
+  virtual absl::Span<const std::string> othernameSansPeerCertificate() const PURE;
+
+  /**
    * @return std::string the hex-encoded TLS session ID as defined in rfc5246.
    **/
   virtual const std::string& sessionId() const PURE;

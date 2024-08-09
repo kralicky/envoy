@@ -70,6 +70,7 @@ message CertificateDetails {
   OcspDetails ocsp_details = 7;
 }
 
+// [#next-free-field: 6]
 message SubjectAlternateName {
   option (udpa.annotations.versioning).previous_message_type =
       "envoy.admin.v2alpha.SubjectAlternateName";
@@ -81,5 +82,9 @@ message SubjectAlternateName {
     string uri = 2;
 
     string ip_address = 3;
+
+    string email = 4;
+
+    string othername = 5;
   }
 }

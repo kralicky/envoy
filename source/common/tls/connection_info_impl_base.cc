@@ -189,6 +189,34 @@ absl::Span<const std::string> ConnectionInfoImplBase::ipSansPeerCertificate() co
   return cached_ip_san_peer_certificate_;
 }
 
+absl::Span<const std::string> ConnectionInfoImplBase::emailSansPeerCertificate() const {
+  if (!cached_email_san_peer_certificate_.empty()) {
+    return cached_email_san_peer_certificate_;
+  }
+
+  bssl::UniquePtr<X509> cert(SSL_get_peer_certificate(ssl()));
+  if (!cert) {
+    ASSERT(cached_email_san_peer_certificate_.empty());
+    return cached_email_san_peer_certificate_;
+  }
+  cached_email_san_peer_certificate_ = Utility::getSubjectAltNames(*cert, GEN_EMAIL, true);
+  return cached_email_san_peer_certificate_;
+}
+
+absl::Span<const std::string> ConnectionInfoImplBase::othernameSansPeerCertificate() const {
+  if (!cached_othername_san_peer_certificate_.empty()) {
+    return cached_othername_san_peer_certificate_;
+  }
+
+  bssl::UniquePtr<X509> cert(SSL_get_peer_certificate(ssl()));
+  if (!cert) {
+    ASSERT(cached_othername_san_peer_certificate_.empty());
+    return cached_othername_san_peer_certificate_;
+  }
+  cached_othername_san_peer_certificate_ = Utility::getSubjectAltNames(*cert, GEN_OTHERNAME, true);
+  return cached_othername_san_peer_certificate_;
+}
+
 uint16_t ConnectionInfoImplBase::ciphersuiteId() const {
   const SSL_CIPHER* cipher = SSL_get_current_cipher(ssl());
   if (cipher == nullptr) {

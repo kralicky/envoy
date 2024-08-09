@@ -47,6 +47,16 @@ Envoy::Ssl::CertificateDetailsPtr Utility::certificateDetails(X509* cert, const 
         *certificate_details->add_subject_alt_names();
     subject_alt_name.set_ip_address(ip_san);
   }
+  for (auto& email_san : Utility::getSubjectAltNames(*cert, GEN_EMAIL)) {
+    envoy::admin::v3::SubjectAlternateName& subject_alt_name =
+        *certificate_details->add_subject_alt_names();
+    subject_alt_name.set_email(email_san);
+  }
+  for (auto& othername_san : Utility::getSubjectAltNames(*cert, GEN_OTHERNAME)) {
+    envoy::admin::v3::SubjectAlternateName& subject_alt_name =
+        *certificate_details->add_subject_alt_names();
+    subject_alt_name.set_othername(othername_san);
+  }
   return certificate_details;
 }
 

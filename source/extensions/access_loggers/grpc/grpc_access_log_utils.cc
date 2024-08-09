@@ -206,6 +206,22 @@ void Utility::extractCommonAccessLogProperties(
       auto* peer_san = peer_properties->add_subject_alt_name();
       peer_san->set_uri(MessageUtil::sanitizeUtf8String(uri_san));
     }
+    for (const auto& dns_san : downstream_ssl_connection->dnsSansPeerCertificate()) {
+      auto* peer_san = peer_properties->add_subject_alt_name();
+      peer_san->set_dns(MessageUtil::sanitizeUtf8String(dns_san));
+    }
+    for (const auto& ip_san : downstream_ssl_connection->ipSansPeerCertificate()) {
+      auto* peer_san = peer_properties->add_subject_alt_name();
+      peer_san->set_ip_address(MessageUtil::sanitizeUtf8String(ip_san));
+    }
+    for (const auto& email_san : downstream_ssl_connection->emailSansPeerCertificate()) {
+      auto* peer_san = peer_properties->add_subject_alt_name();
+      peer_san->set_email(MessageUtil::sanitizeUtf8String(email_san));
+    }
+    for (const auto& othername_san : downstream_ssl_connection->othernameSansPeerCertificate()) {
+      auto* peer_san = peer_properties->add_subject_alt_name();
+      peer_san->set_othername(MessageUtil::sanitizeUtf8String(othername_san));
+    }
 
     peer_properties->set_subject(downstream_ssl_connection->subjectPeerCertificate());
     peer_properties->set_issuer(
